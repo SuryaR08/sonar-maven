@@ -1,4 +1,3 @@
-package com.example.jdbc.sonarmaven;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
