@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        SONAR_TOKEN = credentials('sonarqube-token')
+        MAVEN_PATH = 'C:\\Users\\surya\\Downloads\\apache-maven-3.9.9-bin\\apache-maven-3.9.9\\bin'
+        SONAR_TOKEN = credentials('sonarqube-token') 
     }
     stages {
         stage('Checkout') {
@@ -11,30 +12,22 @@ pipeline {
         }
         stage('Build & Test') {
             steps {
-                script {
-                    def mvnHome = tool 'sonarmaven'
-                    bat """
-                    set PATH=${mvnHome}\\bin;%PATH%
-                    mvn clean verify
-                    """
-                }
+                bat '''
+                set PATH=%MAVEN_PATH%;%PATH%
+                mvn clean verify
+                '''
             }
         }
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    def mvnHome = tool 'sonarmaven'
-                    withSonarQubeEnv('sonarqube-server') { 
-                        bat """
-                        set PATH=${mvnHome}\\bin;%PATH%
-                        mvn sonar:sonar \
-                          -Dsonar.projectKey=sonarmaven \
-                          -Dsonar.projectName="sonarmaven" \
-                          -Dsonar.host.url=http://localhost:9000 \
-                          -Dsonar.token=${SONAR_TOKEN}
-                        """
-                    }
-                }
+                bat '''
+                set PATH=%MAVEN_PATH%;%PATH%
+                mvn sonar:sonar ^
+                  -Dsonar.projectKey=sonarmaven ^
+                  -Dsonar.projectName="sonarmaven" ^
+                  -Dsonar.host.url=http://localhost:9000 ^
+                  -Dsonar.token=%SONAR_TOKEN%
+                '''
             }
         }
     }
