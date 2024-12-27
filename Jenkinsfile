@@ -23,8 +23,8 @@ pipeline {
                 bat '''
                 set PATH=%MAVEN_PATH%;%PATH%
                 mvn sonar:sonar ^
-                  -Dsonar.projectKey=sonarmaven ^
-                  -Dsonar.projectName="sonarmaven" ^
+                  -Dsonar.projectKey=maventry1 ^
+                  -Dsonar.projectName="maventry1" ^
                   -Dsonar.host.url=http://localhost:9000 ^
                   -Dsonar.token=%SONAR_TOKEN%
                 '''
