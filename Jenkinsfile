@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        SONAR_TOKEN = credentials('sonarqube-token') 
+        SONAR_TOKEN = credentials('sonarqube-token')
     }
     stages {
         stage('Checkout') {
@@ -12,9 +12,9 @@ pipeline {
         stage('Build & Test') {
             steps {
                 script {
-                    def mvnHome = tool 'sonarmaven' 
+                    def mvnHome = tool 'sonarmaven'
                     bat """
-                    set PATH=%mvnHome%\\bin;%PATH%
+                    set PATH=${mvnHome}\\bin;%PATH%
                     mvn clean verify
                     """
                 }
@@ -26,12 +26,12 @@ pipeline {
                     def mvnHome = tool 'sonarmaven'
                     withSonarQubeEnv('SonarQube') { 
                         bat """
-                        set PATH=%mvnHome%\\bin;%PATH%
-                        mvn sonar:sonar ^
-                          -Dsonar.projectKey=sonarmaven ^
-                          -Dsonar.projectName="sonarmaven" ^
-                          -Dsonar.host.url=http://localhost:9000 ^
-                          -Dsonar.token=%SONAR_TOKEN%
+                        set PATH=${mvnHome}\\bin;%PATH%
+                        mvn sonar:sonar \
+                          -Dsonar.projectKey=sonarmaven \
+                          -Dsonar.projectName="sonarmaven" \
+                          -Dsonar.host.url=http://localhost:9000 \
+                          -Dsonar.token=${SONAR_TOKEN}
                         """
                     }
                 }
