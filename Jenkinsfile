@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     def mvnHome = tool 'sonarmaven'
-                    withSonarQubeEnv('SonarQube') { 
+                    withSonarQubeEnv('sonarqube-server') { 
                         bat """
                         set PATH=${mvnHome}\\bin;%PATH%
                         mvn sonar:sonar \
