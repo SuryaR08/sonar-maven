@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        SONAR_TOKEN = credentials('sonarqube-token') 
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -8,21 +11,30 @@ pipeline {
         }
         stage('Build & Test') {
             steps {
-                sh 'mvn clean verify'
+                script {
+                    def mvnHome = tool 'sonarmaven' 
+                    bat """
+                    set PATH=%mvnHome%\\bin;%PATH%
+                    mvn clean verify
+                    """
+                }
             }
         }
-        stage('SonarAnalysis') {
-            environment {
-                SONAR_TOKEN = credentials('sonarqube-token')
-            }
+        stage('SonarQube Analysis') {
             steps {
-                bat '''
-                mvn clean verify sonar:sonar \
-                -Dsonar.projectKey=sonarmaven \
-                -Dsonar.projectName='sonarmaven' \
-                -Dsonar.host.url=http://localhost:9000 \
-                -Dsonar.token=sonarqube-token
-                '''
+                script {
+                    def mvnHome = tool 'sonarmaven'
+                    withSonarQubeEnv('SonarQube') { 
+                        bat """
+                        set PATH=%mvnHome%\\bin;%PATH%
+                        mvn sonar:sonar ^
+                          -Dsonar.projectKey=sonarmaven ^
+                          -Dsonar.projectName="sonarmaven" ^
+                          -Dsonar.host.url=http://localhost:9000 ^
+                          -Dsonar.token=%SONAR_TOKEN%
+                        """
+                    }
+                }
             }
         }
     }
