@@ -24,7 +24,7 @@ pipeline {
                 set PATH=%MAVEN_PATH%;%PATH%
                 mvn sonar:sonar ^
                   -Dsonar.projectKey=sonarmaven ^
-                  -Dsonar.projectName="sonarmaven" ^
+                  -Dsonar.sources=src/main/java ^
                   -Dsonar.host.url=http://localhost:9000 ^
                   -Dsonar.token=%SONAR_TOKEN%
                 '''
