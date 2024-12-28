@@ -1,7 +1,10 @@
 pipeline {
     agent any
+   /* tools{
+        maven 'sonarmaven'   (we can also use this if maven set as install automatically in jenkins configurations)
+    } */
     environment {
-        MAVEN_PATH = 'C:\\Users\\surya\\Downloads\\apache-maven-3.9.9-bin\\apache-maven-3.9.9\\bin'
+        MAVEN_PATH = 'C:\\Users\\surya\\Downloads\\apache-maven-3.9.9-bin\\apache-maven-3.9.9\\bin' 
         SONAR_TOKEN = credentials('sonarqube-token') 
     }
     stages {
